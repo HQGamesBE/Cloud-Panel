@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "sourceRoot": "./src",
+	"inlineSourceMap": true,
+	"module": "CommonJS",
+    "target": "ES2018",
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "allowUnreachableCode": true,
+    "skipLibCheck": true
+  }
+}
