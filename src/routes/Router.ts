@@ -5,6 +5,7 @@
  */
 
 import {Router as expressRouter,} from "express";
+import PanelServer from "../PanelServer";
 
 export default abstract class Router {
 	protected readonly router: expressRouter;
@@ -17,6 +18,7 @@ export default abstract class Router {
 		this.router = expressRouter({caseSensitive: false, mergeParams: mergeParams});
 		this.path = path;
 		this.nestedRouters = nestedRouters;
+		this.registerNestedRouters();
 		this.register();
 	}
 
@@ -38,6 +40,6 @@ export default abstract class Router {
 	}
 
 	getBaseUrl(): string {
-		return this.getPath();
+		return `${this.getPath()}`;
 	}
 }

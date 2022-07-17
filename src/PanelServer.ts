@@ -12,17 +12,28 @@ import { engine as handlebarsEngine } from 'express-handlebars';
 import Logger = require("cloud/src/utils/Logger.js");
 import cookieParser = require("cookie-parser");
 import LanguageManager from "./language/LanguageManager";
+import DiscordOauth2 = require("discord-oauth2");
+import {Language} from "./language/Language";
+import * as Discord from "discord.js";
+
+declare var bot: Discord.Client;
+declare var CONFIG: any;
+declare var CONFIG_PRIVATE: any;
 
 interface PanelServerOptions {
 	host: string;
 	jwt_secret: string;
-	port: number;
+	port: number;/*
 	database?: {
 		database: string;
 		user: string;
 		password: string;
 		host: string;
 		port: number;
+	}*/
+	discord: {
+		clientId: string;
+		clientSecret: string;
 	}
 }
 
@@ -32,12 +43,29 @@ export default class PanelServer {
 	readonly app: express.Application;
 	readonly server: http.Server;
 	static readonly publicFolder: string = path.join(__dirname, "../public");
+	static oAuth2: DiscordOauth2;
+	readonly DOMAIN: string;
 
 	constructor(options: PanelServerOptions) {
 		if (PanelServer.instance) throw new Error("PanelServer is a singleton");
 		PanelServer.instance = this;
 		if (!options) throw new Error("Options are undefined");
 		if (!options.host) options.host = "127.0.0.1";
+		// @ts-ignore
+		this.DOMAIN = (TESTING ? "http://localhost:" + options.port : "https://cloud.hqgames.net");
+		PanelServer.oAuth2 = new DiscordOauth2({
+			version: "v9",
+			clientId: options.discord.clientId,
+			clientSecret: options.discord.clientSecret,
+			credentials: Buffer.from(`${options.discord.clientId}:${options.discord.clientSecret}`).toString("base64"),
+			// @ts-ignore
+			scope: [
+				"identify",
+				"guilds.join",
+				"connections"
+			],
+			redirectUri: (this.DOMAIN + "/login")
+		})
 		this.options = options;
 		this.app = express();
 		this.app.set('port', PanelServer.normalizePort(this.options.port));
@@ -48,6 +76,12 @@ export default class PanelServer {
 	static getInstance(): PanelServer {
 		if (!PanelServer.instance) throw new Error("PanelServer is not initialized");
 		return PanelServer.instance;
+	}
+
+	static getBaseUrl(): string {
+		if (process.platform === "win32") return "http://localhost:" + PanelServer.getInstance().options.port;
+		else if (process.platform === "darwin") throw new Error("MacOS is not supported");
+		else return "https://cloud.hqgames.net";
 	}
 
 	getLoggerPrefix() {
@@ -106,7 +140,7 @@ export default class PanelServer {
 		}.bind(this));
 	}
 
-	registerRoutes(): void {
+	private registerRoutes(): void {
 		let routesFolder = path.join(__dirname, "routes");
 		let files = fs.readdirSync(routesFolder);
 		for (let file of files) {
@@ -164,20 +198,27 @@ export default class PanelServer {
 		return this.options;
 	}
 
-	getBasicOptions(req: express.Request, base: Object): Object{
-		let lang = LanguageManager.getLanguageFromRequest(req);
-		return {
+	getBasicOptions(req: express.Request, base: Object = {}): Object{
+		let lang: Language = LanguageManager.getLanguageFromRequest(req);
+		// @ts-ignore
+		if (base.title_prefix) base.title_prefix = lang.getValue(base.title_prefix);
+		let obj = {
 			...base,
 			...{
+				// @ts-ignore
+				loggedIn: !!req.__data,
+				// @ts-ignore
+				__data: req.__data,
+				loginLink: PanelServer.oAuth2.generateAuthUrl({scope: ["identify", "guilds.join", "connections"]}),
 				language: {
 					name: lang.getName(),
 					globalName: lang.getGlobalName(),
 					emoji: lang.getEmoji(),
 				},
-				lang: Object.fromEntries(lang.getValues()),
-				port: this.options.port
+				lang: Object.fromEntries(lang.getValues())
 			}
 		};
+		return obj;
 	}
 }
 

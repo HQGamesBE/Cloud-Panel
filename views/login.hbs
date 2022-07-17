@@ -1,25 +1,54 @@
-<div class="text-center h-100 w-100 justify-content-center pt-5">
-	<main class="form-signin">
-		<form data-bitwarden-watching="1">
-			<img class="mb-4" src="/public/images/HQ.jpg" alt="" width="72" height="57">
-			<h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="public/stylesheet/loading-spinner.css">
+	<title>{{#if title_prefix}}{{title_prefix}} - {{/if}}{{#if title}}{{title}}{{else}}Cloud Panel{{/if}}</title>
+	<link rel="stylesheet" href="public/stylesheet/style.css">
+	<link rel="stylesheet" href="public/stylesheet/bootstrap.min.css">
+	<style>
+		html, body {
+			height: 100%;
+		}
 
-			<div class="form-floating">
-				<input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-				<label for="floatingInput">Email address</label>
-			</div>
-			<div class="form-floating">
-				<input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-				<label for="floatingPassword">Password</label>
-			</div>
+		body {
+			display: flex;
+			align-items: center;
+			padding-top: 40px;
+			padding-bottom: 40px;
+		}
 
-			<div class="checkbox mb-3">
-				<label>
-					<input type="checkbox" value="remember-me"> Remember me
-				</label>
-			</div>
-			<button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-			<p class="mt-5 mb-3 text-muted">© 2017–2021</p>
-		</form>
-	</main>
-</div>
+		.login {
+			width: 100%;
+			max-width: 330px;
+			padding: 15px;
+			margin: auto;
+		}
+	</style>
+</head>
+
+<body class="text-center text-light bg-dark" cz-shortcut-listen="true">
+
+<script>
+	window.addEventListener("load", () => {
+		const loadingSpinner = document.querySelector(".loading-spinner");
+		loadingSpinner.classList.add("loading-spinner-hidden");
+		loadingSpinner.addEventListener("transitionend", () => {
+			document.body.removeChild(loadingSpinner);
+		});
+	});
+</script>
+<div class="loading-spinner"></div>
+
+<main class="login">
+	<img class="mb-4" src="public/images/HQ.jpg" alt=""
+		 width="72" height="70">
+
+	<button class="w-100 btn btn-lg btn-primary"
+			onclick="window.location = '{{ loginLink }}';">{{ lang.loginWithDiscord }}</button>
+</main>
+
+
+</body>
+</html>

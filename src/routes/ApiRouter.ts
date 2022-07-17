@@ -7,6 +7,8 @@
 import Router from "./Router";
 import V1Router from "./api/v1/V1Router";
 import * as fs from "node:fs";
+import {Collection} from "discord.js";
+import PanelServer from "../PanelServer";
 
 export default class ApiRouter extends Router {
 	constructor() {
@@ -15,15 +17,14 @@ export default class ApiRouter extends Router {
 
 	protected register(): void {
 		this.router.get("/", (req, res) => {
-			res.json({
+			let versions = new Collection<string, string>();
+			for (let filename of fs.readdirSync(__dirname + "/api")) {
+					if (!filename.startsWith("v")) continue;
+					versions.set(filename, `${PanelServer.getBaseUrl()}${this.getBaseUrl()}/${filename}`);
+			}
+			res.status(200).json({
 				status: "ok",
-				versions: fs.readdirSync(__dirname + "/api").map(filename => {
-					if (!filename.startsWith("v")) return;
-					return {
-						version: filename,
-						url: `http://localhost:1111/${this.getBaseUrl()}/${filename.substring(1)}`,
-					};
-				}),
+				versions: Object.fromEntries(versions),
 			});
 		});
 	}

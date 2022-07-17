@@ -46,8 +46,11 @@ export class Language {
 		return this.emoji;
 	}
 
-	getValue(key: string): string {
-		return <string>this.values.get(key);
+	getValue(key: string, ...params: Array<string>): string {
+		let translated = <string>this.values.get(key) || key;
+		if (params.length == 0) return translated;
+		for (let i = 0; i < params.length; i++) translated = translated.replace(`{${i}}`, params[i]);
+		return translated;
 	}
 
 	getValues(): Collection<string, string> {

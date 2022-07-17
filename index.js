@@ -1,1 +1,1 @@
-module.exports = require("./dist/ExpressServer.js");
+module.exports = require("./dist/PanelServer.js");

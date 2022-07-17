@@ -4,8 +4,23 @@
  * I don't want anyone to use my source code without permission.
  */
 
+:root {
+  --bs-primary: #8a4fff;
+  --bs-secondary: #c3bef7;
+  --bs-gray-dark: #062726;
+  --bs-info: #0fa3b1;
+  --bs-dark: #102b3f;
+  --bs-light: #f5f5f5;
+  --bs-danger: #ff4d4f;
+  --bs-success: #c2e8c9;
+}
+
 body {
   font-size: .875rem;
+}
+
+.active {
+  color: #8165c4 !important;
 }
 
 .feather {

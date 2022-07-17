@@ -5,17 +5,23 @@
  */
 
 import Router from "../../Router";
+import PanelServer from "../../../PanelServer";
+import LanguageRouter from "./LanguageRouter";
 
 export default class V1Router extends Router{
 	constructor() {
-		super("/v1");
+		super("/v1", new LanguageRouter);
 	}
 
 	protected register(): void {
 		this.router.get("/", (req, res) => {
 			res.json({
 				status: "ok",
-				version: "1.0.0",
+				routes: this.nestedRouters.map((router) => {
+					return {
+						url: `${PanelServer.getBaseUrl()}/api${this.getBaseUrl()}${router.getBaseUrl()}`
+					};
+				})
 			});
 		});
 	}
