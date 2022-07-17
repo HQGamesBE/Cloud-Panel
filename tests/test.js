@@ -5,6 +5,7 @@
  */
 global.DEBUG = true;
 global.TESTING = true;
+global.Logger = require('cloud/src/utils/Logger.js');
 require("colors");
 global.LIBRARIES = {
 	moment: require("moment"),

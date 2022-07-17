@@ -114,7 +114,6 @@ export default class PanelServer {
 			let filePath = path.join(routesFolder, file);
 			let stat = fs.statSync(filePath);
 			if (stat.isFile()) {
-				console.log(filePath)
 				let route = new (require(filePath).default)();
 				this.app.use(route.getPath(), route.getRouter());
 				this.log(`Registering route ${route.getPath()}`);

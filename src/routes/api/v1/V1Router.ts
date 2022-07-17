@@ -6,9 +6,9 @@
 
 import Router from "../../Router";
 
-export class V1Router extends Router{
+export default class V1Router extends Router{
 	constructor() {
-		super("/v1", {caseSensitive: false, mergeParams: true});
+		super("/v1");
 	}
 
 	protected register(): void {

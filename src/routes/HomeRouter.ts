@@ -12,7 +12,7 @@ import Logger = require("cloud/src/utils/Logger");
 
 export default class HomeRouter extends Router{
 	constructor() {
-		super("/", {caseSensitive: false, mergeParams: false});
+		super("/");
 	}
 
 	protected register(): void {

@@ -5,13 +5,26 @@
  */
 
 import Router from "./Router";
+import V1Router from "./api/v1/V1Router";
+import * as fs from "node:fs";
 
-export class ApiRouter extends Router {
+export default class ApiRouter extends Router {
 	constructor() {
-		super("/api", {caseSensitive: false});
+		super("/api", new V1Router());
 	}
 
 	protected register(): void {
-		this.router.use(this)
+		this.router.get("/", (req, res) => {
+			res.json({
+				status: "ok",
+				versions: fs.readdirSync(__dirname + "/api").map(filename => {
+					if (!filename.startsWith("v")) return;
+					return {
+						version: filename,
+						url: `http://localhost:1111/${this.getBaseUrl()}/${filename.substring(1)}`,
+					};
+				}),
+			});
+		});
 	}
 }
