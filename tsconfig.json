@@ -2,7 +2,10 @@
   "compilerOptions": {
     "outDir": "./dist",
     "sourceRoot": "./src",
-	"inlineSourceMap": true,
+    "rootDirs": [
+      "./src"
+    ],
+    "inlineSourceMap": true,
 	"module": "CommonJS",
     "target": "ES2018",
     "esModuleInterop": false,

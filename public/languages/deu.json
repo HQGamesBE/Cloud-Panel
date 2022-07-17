@@ -1,0 +1,18 @@
+{
+	"name": "Deutsch",
+	"globalName": "German",
+	"langCode": "deu",
+	"emoji": "🇩🇪",
+
+	"values": {
+		"signin": "Anmelden",
+		"signout": "Abmelden",
+		"signup": "Registrieren",
+		"dashboard": "Dashboard",
+		"templates": "Vorlagen",
+		"servers": "Server",
+		"reports": "Reports",
+		"replays": "Replays",
+		"": ""
+	}
+}
