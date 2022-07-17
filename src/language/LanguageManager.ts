@@ -4,7 +4,7 @@
  * I don't want anyone to use my source code without permission.
  */
 
-import {Language, LanguageArguments} from "./Language";
+import {Language} from "./Language";
 import * as fs from "node:fs";
 import PanelServer from "../PanelServer";
 import * as path from "path";
@@ -24,10 +24,11 @@ class LanguageManager {
 	constructor() {
 		if (LanguageManager.instance) throw new Error("LanguageManager is a singleton class");
 		LanguageManager.instance = this;
-		this.loadLanguages();
+		this.reloadLanguages();
 	}
 
-	private loadLanguages(): void {
+	public reloadLanguages(): void {
+		this.languages.clear();
 		this.registerLanguage(LanguageManager.FALLBACK_LANGUAGE + ".json");
 		for (let filename of fs.readdirSync(path.join(PanelServer.publicFolder, "languages"), "utf8")) {
 			if (filename.startsWith(LanguageManager.FALLBACK_LANGUAGE + ".json")) continue;
@@ -53,4 +54,5 @@ class LanguageManager {
 		return LanguageManager.getInstance().languages;
 	}
 }
+
 export default LanguageManager;
