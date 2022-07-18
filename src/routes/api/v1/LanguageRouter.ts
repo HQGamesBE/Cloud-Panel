@@ -5,7 +5,7 @@
  */
 
 import Router from "../../Router";
-import LanguageManager from "../../../language/LanguageManager";
+import {LanguageManager} from "../../../language/LanguageManager";
 
 export default class LanguageRouter extends Router{
 	constructor() {

@@ -5,7 +5,7 @@
   "main": "./index.js",
   "scripts": {
     "build": "tsc && exit 1",
-    "test": "nodemon --exec \"node ./tests/test.js\""
+    "start": "tsc && node ./tests/test.js"
   },
   "repository": {
     "type": "git",

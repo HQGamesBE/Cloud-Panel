@@ -5,8 +5,8 @@
  */
 
 import {Request, Response, NextFunction} from "express";
-import LanguageManager from "./language/LanguageManager";
 import {decode as jwtDecode} from "jsonwebtoken";
+import {LanguageManager} from "./language/LanguageManager";
 
 export class MiddlewareHolder {
 	static checkForLogin(req: Request, res: Response, next: NextFunction): void {
@@ -16,6 +16,8 @@ export class MiddlewareHolder {
 		if (Date.now() < __data.expires_at) {
 			// @ts-ignore
 			req.__data = __data;
+			// @ts-ignore
+			req.language = LanguageManager.getLanguage(req.cookies.langCode);
 			return next();
 		}
 		res.redirect("/login"); // NOTE: If __data is expired, redirect to the login page.
@@ -32,12 +34,8 @@ export class MiddlewareHolder {
 				return;
 			}
 		}
-		next();
-	}
-
-	static applyLangauge(req: Request, res: Response, next: NextFunction): void {
 		// @ts-ignore
-		req.language = LanguageManager.getInstance().getLanguage(req.cookies.lang);
+		req.language = LanguageManager.getLanguage(req.cookies.lang);
 		next();
 	}
 }

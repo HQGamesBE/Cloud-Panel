@@ -5,17 +5,18 @@
 	"emoji": "🇺🇸",
 
 	"values": {
-		"signin": "Sign In",
-		"signup": "Sign Up",
 		"signout": "Sign Out",
 		"dashboard": "Dashboard",
 		"templates": "Templates",
+		"players": "Players",
 		"servers": "Servers",
 		"reports": "Reports",
 		"replays": "Replays",
 		"notFound": "Not Found",
 		"loginWithDiscord": "Login with Discord",
 		"mainActions": "Main Actions",
+		"report_title_id": "Report #{0}",
+		"replay_title_id": "Replay #{0}",
 		"": ""
 	}
 }

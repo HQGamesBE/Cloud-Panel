@@ -11,7 +11,7 @@ import * as path from "path";
 import {Collection} from "discord.js";
 import {Request} from "express";
 
-class LanguageManager {
+export class LanguageManager {
 	private static readonly FALLBACK_LANGUAGE: string = "eng";
 	private static instance: LanguageManager;
 	private languages: Collection<string, Language> = new Collection<string, Language>();
@@ -54,5 +54,3 @@ class LanguageManager {
 		return LanguageManager.getInstance().languages;
 	}
 }
-
-export default LanguageManager;

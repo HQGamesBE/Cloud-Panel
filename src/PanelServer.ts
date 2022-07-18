@@ -11,10 +11,15 @@ import { engine as handlebarsEngine } from 'express-handlebars';
 // @ts-ignore
 import Logger = require("cloud/src/utils/Logger.js");
 import cookieParser = require("cookie-parser");
-import LanguageManager from "./language/LanguageManager";
+import {LanguageManager} from "./language/LanguageManager";
 import DiscordOauth2 = require("discord-oauth2");
 import {Language} from "./language/Language";
 import * as Discord from "discord.js";
+
+type ServerVisibility = "Public" | "Private";
+type ServerState = "Online" | "Offline" | "Starting";
+type GameState = "Lobby" | "Starting" | "Running" | "Ending";
+type ServerType = "Lobby" | "Game" | "Builder" | "Developer";
 
 declare var bot: Discord.Client;
 declare var CONFIG: any;
@@ -35,6 +40,41 @@ interface PanelServerOptions {
 		clientId: string;
 		clientSecret: string;
 	}
+}
+
+export interface Template{
+	enabled: boolean;
+	name: string;
+	display_name: string;
+	type: ServerType;
+	maintained: boolean;
+	image: null|string;
+	readonly start_amount: number;
+	max_players: number;
+	player_minimum_percent: number;
+	player_maximum_percent: number;
+	folder: string;
+}
+
+export interface Server {
+	container: any;
+	query_running: boolean;
+	created: number;
+	query_fails: number;
+	visibility: ServerVisibility;
+	online_state: ServerState;
+	player_count: number;
+	running: boolean;
+	killed: boolean;
+
+	constructor(template: Template, identifier: string, port: number): void;
+	boot(): void;
+	stop(): void;
+	kill(): void;
+	deleteFiles(command: string): void;
+	query(): Promise<boolean>;
+	executeCommandInContainer(command: string): void;
+	executeCommand(command: string): void;
 }
 
 export default class PanelServer {
